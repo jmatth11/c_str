@@ -14,8 +14,8 @@ struct internal_c_str {
 c_str_error append(struct c_str* data, const char* str, size_t len) {
     size_t d_len = data->_internal->len;
     size_t new_len = d_len + len;
-    if (new_len > data->_internal->cap) {
-        size_t new_cap = ((double)data->_internal->cap * C_STR_ARRAY_INC_CONSTANT);
+    if (new_len >= data->_internal->cap) {
+        size_t new_cap = ((double)new_len * C_STR_ARRAY_INC_CONSTANT);
         data->_internal->data = realloc(
                 data->_internal->data, sizeof(char) * new_cap);
         data->_internal->cap = new_cap;
@@ -44,7 +44,19 @@ c_str_error get_const_str(const struct c_str* data, const char ** out) {
 }
 
 c_str_error set(struct c_str* data, const char *str, size_t len) {
-    // TODO set the string and account for resizing if needed.
+    size_t cap = data->_internal->cap;
+    if (len >= cap) {
+        size_t new_cap = ((double)len * C_STR_ARRAY_INC_CONSTANT);
+        data->_internal->data = realloc(
+                data->_internal->data, sizeof(char) * new_cap);
+        data->_internal->cap = new_cap;
+        if (data->_internal->data == NULL) {
+            return C_STR_MALLOC_ERROR;
+        }
+    }
+    strncpy(data->_internal->data, str, len);
+    data->_internal->data[len] = '\0';
+    data->_internal->len = len;
     return C_STR_NO_ERROR;
 }
 
