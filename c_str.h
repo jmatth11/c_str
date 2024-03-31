@@ -61,7 +61,7 @@ typedef struct c_str {
      * @param[in] size_t The size of the given string.
      * @returns c_str_error.
      */
-    c_str_error (*set)(struct c_str*, const char *, size_t);
+    c_str_error (*set)(struct c_str*, const char *, const size_t);
     /**
      * Get the character at the given index.
      * @param[in] struct c_str* The c_str structure.
@@ -69,7 +69,7 @@ typedef struct c_str {
      * @param[out] char* The out param.
      * @returns c_str_error.
      */
-    c_str_error (*at)(struct c_str*, size_t, char*);
+    c_str_error (*at)(const struct c_str*, const size_t, char*);
 } c_str;
 
 /**
