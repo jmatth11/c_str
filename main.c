@@ -79,6 +79,25 @@ static void test_free_c_str() {
   assert(value._internal == NULL);
 }
 
+static void test_append() {
+  c_str value;
+  char* test = test_str();
+  char* test_append = " append";
+  size_t test_len = strlen(test);
+  size_t test_append_len = strlen(test_append);
+  c_str_error err = new_c_str_with_string(&value, test, test_len);
+  assert(err == C_STR_NO_ERROR);
+  err = value.append(&value, test_append, test_append_len);
+  assert(err == C_STR_NO_ERROR);
+  char* expected = malloc(sizeof(char)*(test_len+test_append_len));
+  sprintf(expected, "%s%s", test, test_append);
+  char* result;
+  value.get_str(&value, &result);
+  assert(strcmp(expected, result) == 0);
+  free(test);
+  free_c_str(&value);
+}
+
 int main(int argc, char *argv[]) {
 
   test_new_c_str_normal();
@@ -89,6 +108,8 @@ int main(int argc, char *argv[]) {
   test_new_c_str_with_string_less_than_or_equal_to_zero();
 
   test_free_c_str();
+
+  test_append();
 
   return 0;
 }
