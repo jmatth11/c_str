@@ -30,7 +30,7 @@ c_str_error append(struct c_str* data, const char* str, size_t len) {
     }
     strncpy(&data->_internal->data[d_len], str, len);
     data->_internal->data[new_len] = '\0';
-    data->_internal->len = len;
+    data->_internal->len = new_len;
     return C_STR_NO_ERROR;
 }
 
