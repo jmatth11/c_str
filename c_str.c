@@ -35,7 +35,6 @@ c_str_error append(struct c_str* data, const char* str, size_t len) {
 }
 
 int length(const struct c_str* data) {
-    // subtract null-byte
     return data->_internal->len;
 }
 
