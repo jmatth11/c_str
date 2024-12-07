@@ -11,14 +11,18 @@ struct internal_c_str {
     size_t cap;
 };
 
+static inline void resize(struct internal_c_str* str, size_t len) {
+    size_t new_cap = ((double)len * C_STR_ARRAY_INC_CONSTANT);
+    str->data = realloc(
+            str->data, sizeof(char) * new_cap);
+    str->cap = new_cap;
+}
+
 c_str_error append(struct c_str* data, const char* str, size_t len) {
     size_t d_len = data->_internal->len;
     size_t new_len = d_len + len;
     if (new_len >= data->_internal->cap) {
-        size_t new_cap = ((double)new_len * C_STR_ARRAY_INC_CONSTANT);
-        data->_internal->data = realloc(
-                data->_internal->data, sizeof(char) * new_cap);
-        data->_internal->cap = new_cap;
+        resize(data->_internal, new_len);
         if (data->_internal->data == NULL) {
             return C_STR_MALLOC_ERROR;
         }
@@ -46,10 +50,7 @@ c_str_error get_const_str(const struct c_str* data, const char ** out) {
 c_str_error set(struct c_str* data, const char *str, size_t len) {
     size_t cap = data->_internal->cap;
     if (len >= cap) {
-        size_t new_cap = ((double)len * C_STR_ARRAY_INC_CONSTANT);
-        data->_internal->data = realloc(
-                data->_internal->data, sizeof(char) * new_cap);
-        data->_internal->cap = new_cap;
+        resize(data->_internal, len);
         if (data->_internal->data == NULL) {
             return C_STR_MALLOC_ERROR;
         }
