@@ -1,7 +1,9 @@
 #include "c_str.h"
 #include <string.h>
 
-#define ARRAY_INC_CONSTANT 1.2
+#ifndef C_STR_ARRAY_INC_CONSTANT
+#define C_STR_ARRAY_INC_CONSTANT 1.2
+#endif
 
 struct internal_c_str {
     char* data;
@@ -13,7 +15,7 @@ c_str_error append(struct c_str* data, const char* str, size_t len) {
     size_t d_len = data->_internal->len;
     size_t new_len = d_len + len;
     if (new_len > data->_internal->cap) {
-        size_t new_cap = ((double)data->_internal->cap * ARRAY_INC_CONSTANT);
+        size_t new_cap = ((double)data->_internal->cap * C_STR_ARRAY_INC_CONSTANT);
         data->_internal->data = realloc(
                 data->_internal->data, sizeof(char) * new_cap);
         data->_internal->cap = new_cap;
@@ -77,7 +79,7 @@ c_str_error new_c_str(struct c_str* data, size_t cap) {
 }
 
 c_str_error new_c_str_with_string(struct c_str* data, const char* str, size_t len) {
-    size_t cap = ((double)len * ARRAY_INC_CONSTANT);
+    size_t cap = ((double)len * C_STR_ARRAY_INC_CONSTANT);
     c_str_error err = new_c_str(data, cap);
     if (err!=C_STR_NO_ERROR) {
         return err;
