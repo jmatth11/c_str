@@ -28,7 +28,7 @@ c_str_error append(struct c_str* data, const char* str, size_t len) {
     if (data->_internal->data == NULL) {
         return C_STR_MALLOC_ERROR;
     }
-    strncpy(&data->_internal->data[d_len - 1], str, len);
+    strncpy(&data->_internal->data[d_len], str, len);
     data->_internal->data[new_len] = '\0';
     data->_internal->len = len;
     return C_STR_NO_ERROR;
