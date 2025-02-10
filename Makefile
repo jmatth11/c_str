@@ -37,6 +37,10 @@ archive: $(ARCHIVE_FILES)
 	gcc -shared -fPIC -o $(ARCHIVE_DIR)/$(SHARED_NAME) $(patsubst %.o, $(OBJ)/%.o, $(notdir $^))
 	ar -r $(ARCHIVE_DIR)/$(ARCHIVE_NAME) $(patsubst %.o, $(OBJ)/%.o, $(notdir $^))
 
+.PHONY: test
+test: all
+	./$(BIN)/$(TARGET)
+
 .PHONY: clean
 clean:
 	rm $(BIN)/$(TARGET) $(OBJ)/*.o
